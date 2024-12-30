@@ -1,0 +1,77 @@
+ / Enter value of n, where n > 0
+INPUT
+STORE subroutine_arg0
+JNS CALC_AVG_SUBROUTINE
+Print, LOAD subroutine_result
+Output
+HALT
+CALC_AVG_SUBROUTINE, HEX 200
+ / Load argument subroutine
+LOAD subroutine_arg0
+ / Input n integers to array
+input_loop,  INPUT 
+STOREI pointer  
+
+
+ / Point to next array element 
+LOAD pointer  
+ADD one
+STORE pointer  
+/ i += 1 
+LOAD i
+ADD one  
+STORE i
+ / If i = n, stop  
+SUBT subroutine_arg0
+SKIPCOND 400  
+JUMP input_loop
+ / Initialise variables (again)  
+LOAD start  
+STORE pointer  
+LOAD zero 
+STORE i
+
+
+ / Calculate sum
+calc_sum, LOADI pointer  
+ADD sum 
+STORE sum  
+ / Move to next array element 
+LOAD pointer  
+ADD one 
+STORE pointer  
+ / i +=	1 
+LOAD i
+ADD one 
+STORE i  
+ / If i = n, exit loop 
+SUBT subroutine_arg0
+SKIPCOND 400  
+JUMP calc_sum  
+
+calc_avg, LOAD avg  
+ADD one 
+STORE avg 
+LOAD sum  
+SUBT subroutine_arg0
+STORE sum  
+SKIPCOND 800
+JUMP store_result
+JUMP calc_avg
+store_result, LOAD avg
+STORE subroutine_result
+JUMPI  CALC_AVG_SUBROUTINE
+ / Data Section
+one, DEC 1 
+zero, DEC 0
+avg, DEC 0 
+start, HEX 100  
+
+
+
+ / Variables 
+sum, DEC 0
+i, DEC 0
+pointer, HEX 100
+subroutine_arg0, DEC 0
+subroutine_result, DEC 0
